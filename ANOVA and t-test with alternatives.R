@@ -3,19 +3,20 @@ library(readxl)
 library(openxlsx)
 library(dplyr)
 library(epiDisplay) #tabpct function
+library(sjmisc) #frq function
 library(qacBase) #qstats function
 library(emmeans) #multiple comparisons
 library(lsr) #cohens d
 library(sandwich) #robust standard errors
 library(stats) #wilcoxon test
-
+library(car) #Levene Test
 
 # DESCRIPTIVES AND DIAGNOSTICS
 ## Descriptives
 tabpct(df$x,df$group,graph=FALSE,percent = "col") #Frequency Table
 qstats(df, x, group) #Group N, Mean, SD (at least k+1 per group)
 
-## Homogeneity of Variances
+## Homogeneity of Variances - ANOVA or t-test
 mod <- aov(x ~ group, data = df)
 
 leveneTest(mod) #Levene Test (ns = homogeneous)
@@ -43,10 +44,10 @@ kruskal.test(x ~ group, data = df)
 dunn_test(df, x ~ group, p.adjust.method = "fdr", detailed = FALSE) #contrasts
 
 # DIFFERENCE BETWEEN 2 GROUPS - Normal, homoscedastic or heteroscedastic
-t.test(x ~ group, data = df.Res, var.equal=TRUE) #homoscedastic
+t.test(x ~ group, data = df, var.equal=TRUE) #homoscedastic
 cohensD(x ~ group, data = df, method ="pooled")
 
-t.test(x ~ group, data = df.Res, var.equal=FALSE) #heteroscedastic
+t.test(x ~ group, data = df, var.equal=FALSE) #heteroscedastic
 cohensD(x ~ group, data = df, method ="unequal")
 
 # DIFFERENCE BETWEEN 2 GROUPS - Non-normal residuals
