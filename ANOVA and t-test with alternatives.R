@@ -10,6 +10,7 @@ library(lsr) #cohens d
 library(sandwich) #robust standard errors
 library(stats) #wilcoxon test
 library(car) #Levene Test
+library(pairwiseCI) #display pairwise proportions differences
 
 # DESCRIPTIVES AND DIAGNOSTICS
 ## Descriptives
@@ -53,9 +54,18 @@ cohensD(x ~ group, data = df, method ="unequal")
 # DIFFERENCE BETWEEN 2 GROUPS - Non-normal residuals
 wilcox.test(df$x ~ df$group, mu=0,alt="two.sided",conf.int=T,conf.level=0.95,exact=F,correct=F)
 
+# PRESENT DIFFERENCE BETWEEN PAIRWISE FAVORABLE PROPORTIONS
+df.props <- df %>%
+  group_by(group) %>%
+  summarise(Favorable = sum(x),
+            NotFavorable = sum(1 - x),
+            .groups = 'drop')
 
-
-
+pairwiseCI(formula = cbind(Favorable, NotFavorable) ~ group,
+           data = df.props,
+           method = "Prop.diff",
+           alternative = "two.sided", 
+           conf.level = 0.95) 
 
 
 
