@@ -1,0 +1,13 @@
+
+
+#CHI-SQUARE TEST
+
+# FISHERS EXACT TEST
+## Single test
+fisher.test(df$WORKPLACEPREFERENCE, df$EMPLOYEEGENDER, simulate.p.value = TRUE, B = 10000)
+
+## Pairwise test
+pairwise.fisher.test(df.salary$Recommend_fav,df.salary$GradeRange_24,p.adjust.method = "fdr")
+
+
+
