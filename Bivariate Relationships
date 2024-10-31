@@ -1,4 +1,4 @@
-
+library(reporttools) #pairwise fisher exact test
 
 #CHI-SQUARE TEST
 
