@@ -1,1 +1,170 @@
+#LIBRARIES
+library(sjmisc) #frequency tables with frq function
+library(sampling)
+library(dplyr)
+library(epiDisplay)
+library(tidyverse)
+library(readxl)
+library(openxlsx)
+
+
+#READ AND PREP THE DATA
+df <- read_excel("sample frame file.xlsx", sheet = "Export")
+
+#rename variables if needed to remove spaces and special characters
+names(df) <- toupper(names(df))
+names(df) <- gsub("[^A-Z0-9]", "_", names(df))
+print(names(df))
+
+#RTI only - CFO Realignment
+df$REPORTING_LEVEL_2__DESCRIPTION_ <- ifelse(
+  is.na(df$REPORTING_LEVEL_3__DESCRIPTION_),
+  df$REPORTING_LEVEL_2__DESCRIPTION_,  # Keep original if NA in level 3 description
+  ifelse(
+    df$REPORTING_LEVEL_3__DESCRIPTION_ == "Unit Finance",
+    "Chief Financial Officer",
+    df$REPORTING_LEVEL_2__DESCRIPTION_
+  )
+)
+
+#RTI only - Make ADM RL1 reflect RL2
+# frq(df$REPORTING_LEVEL_1)
+# frq(df$REPORTING_LEVEL_2__DESCRIPTION_)
+# 
+# df$REPORTING_LEVEL_1_ADM <- ifelse(df$REPORTING_LEVEL_1 == "ADM",df$REPORTING_LEVEL_2__DESCRIPTION_,
+#                                df$REPORTING_LEVEL_1)
+# frq(df$REPORTING_LEVEL_1_ADM)
+
+#Filtering
+# remove values from a variable
+# df <- df[!df$var %in% c("value1", "value2"), ]
+
+
+#CHECK STRATA PROPORTIONS
+##location
+frq(df$LOCATION_TYPE)
+
+df.NA <- df[is.na(df$LOCATION_TYPE),] #inspect missing location obs
+rm(df.NA)
+
+df <- df[!is.na(df$LOCATION_TYPE),] #remove NA obs from sampling frame
+
+##business/research unit
+frq(df$REPORTING_LEVEL_1)
+
+##Unit by Location
+tabpct(df$REPORTING_LEVEL_1,df$LOCATION_TYPE,percent = "row",graph=FALSE)
+
+
+#PULLING SAMPLES
+#Filter sample to cross-section if needed
+df.cross <- df %>%
+  filter(var1 == value1, var2 == "value1")
+
+#check strata frequencies
+frq(df.cross$var)
+
+#Pull Proportional Stratified Sample
+# prop.strat <- df.cross %>%
+#   group_by(group) %>%
+#   sample_frac(8/nrow(df.cross))
+ 
+#Pull Balanced Stratified Sample
+balanced.strat <- df.cross %>%
+  group_by(group) %>%
+  sample_n(1) %>%
+  ungroup()
+
+#get additional participants
+additional_samples <- balanced.strat %>% 
+    sample_n(2)
+
+balanced.strat <- bind_rows(balanced.strat, additional_samples)
+
+#Check sample frequencies
+frq(balanced.strat$group)
+
+#write sample
+write.xlsx(balanced.strat, file = "sample name.xlsx")
+
+#REPLACEMENTS FOR ALL PARTICIPANTS
+balanced.strat <- read_excel("Sample.xlsx", sheet = "Sheet1")
+
+# Function to find matches
+find_matches <- function(employee, df, n_matches = 5) {
+  df %>%
+    filter(
+      REPORTING_LEVEL_1 == employee$REPORTING_LEVEL_1,
+      RACE_ETHNICITY_GROUP == employee$RACE_ETHNICITY_GROUP,
+      #EMPLOYEE_GENDER == employee$EMPLOYEE_GENDER,
+      #TENURE_RANGE == employee$TENURE_RANGE,
+      PERSON_NUMBER != employee$PERSON_NUMBER
+    ) %>%
+    mutate(ORIGINAL_MATCH = employee$PERSON_NUMBER) %>%
+    slice_sample(n = 5)
+}
+
+
+# Apply function to each sample employee
+replacement_list <- lapply(seq_len(nrow(balanced.strat)), function(i) {
+  employee <- balanced.strat[i, ]
+  find_matches(employee, balanced.strat, n_matches = 5)
+})
+
+# Combine all replacement lists into one data frame
+all_replacements <- do.call(rbind, replacement_list)
+all_replacements <- all_replacements[c(ncol(all_replacements), 1:(ncol(df)-1))]
+View(all_replacements)
+
+#write replacements
+write.xlsx(all_replacements, file = "replace_sample.xlsx")
+
+#REPLACEMENTS FOR ONE EMPLOYEE
+df$DIRECT_REPORTS_2 <- ifelse(df$DIRECT_REPORTS == 0,0,1) #if manager status is considered
+
+#reorder variables for tracker
+front.vars <- c("FULL_NAME", "PERSON_NUMBER", "PRIMARY_EMAIL","REPORTING_LEVEL_1",
+                "REPORTING_LEVEL_2__DESCRIPTION_","RACE_ETHNICITY","TENURE_RANGE","EMPLOYEE_GENDER")
+
+df <- df[c(front.vars, setdiff(names(df), front.vars))]
+
+#find matching staff
+origin_emp <- df %>% 
+  filter(PERSON_NUMBER == "000000") %>%  
+  dplyr::select(PERSON_NUMBER,
+                DIRECT_REPORTS_2, 
+                INCLUDE_EXCLUDE,
+                LOCATION_TYPE,
+                WORKPLACE_PREFERENCE,
+                REPORTING_LEVEL_1,
+                RACE_ETHNICITY_GROUP,
+                TENURE_RANGE,
+                EMPLOYEE_GENDER)
+#View(origin_emp)
+
+replacements <- df %>%
+  filter(
+    #fixed
+    INCLUDE_EXCLUDE == origin_emp$INCLUDE_EXCLUDE,
+    DIRECT_REPORTS_2 == origin_emp$DIRECT_REPORTS_2,
+    LOCATION_TYPE == origin_emp$LOCATION_TYPE,
+    WORKPLACE_PREFERENCE == origin_emp$WORKPLACE_PREFERENCE,
+    #REPORTING_LEVEL_1 == origin_emp$REPORTING_LEVEL_1,
+    #variable
+    #EMPLOYEE_GENDER == origin_emp$EMPLOYEE_GENDER,
+    RACE_ETHNICITY_GROUP != origin_emp$RACE_ETHNICITY_GROUP,
+    #TENURE_RANGE == origin_emp$TENURE_RANGE,
+    PERSON_NUMBER != origin_emp$PERSON_NUMBER
+  ) %>%
+  slice_sample(n = 35)
+#View(replacements)
+
+write.xlsx(replacements, file = "000000 Replacements.xlsx")
+
+
+
+
+
+
+
 
