@@ -39,6 +39,9 @@ df$REPORTING_LEVEL_2__DESCRIPTION_ <- ifelse(
 # remove values from a variable
 # df <- df[!df$var %in% c("value1", "value2"), ]
 
+#Remove last 2 rows from staff export file
+df <- head(df, -2)
+
 
 #CHECK STRATA PROPORTIONS
 ##location
