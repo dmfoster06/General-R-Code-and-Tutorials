@@ -1,1 +1,12 @@
+#SORT DATAFRAME
+library(dplyr)
+df.sorted <- df %>%
+  arrange(desc(x)) #sorts descending. Remove desc() function if you want ascending
+
+#FINDING DUPLICATES
+anyDuplicated(df$x) #returns a number
+
+
+
+
 
