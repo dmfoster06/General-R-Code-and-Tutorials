@@ -6,6 +6,7 @@ df.sorted <- df %>%
 #FINDING DUPLICATES
 anyDuplicated(df$x) #returns a number
 
+df.dups <- df[duplicated(df$x), ] #Create dataset with only duplicates
 
 
 
