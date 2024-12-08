@@ -1,0 +1,16 @@
+#Project Name: 
+#
+#Purpose: 
+#
+#Author: Dominique Foster
+
+rm(list = ls()) #for clearing environment
+rm() #for clearing out specific objects
+rm(list=setdiff(ls(), "df")) #remove everything from environment except x object(s)
+
+setwd("")
+
+######LIBRARIES#####
+
+#####DATA PREP#####
+df <- read_excel("filename.xlsx", sheet = "SheetName")
