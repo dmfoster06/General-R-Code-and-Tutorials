@@ -46,6 +46,10 @@ df <- head(df, -2)
 frq(df$PERSON_TYPE)
 frq(df$REPORTING_LEVEL_4)
 
+#reorder variables for tracker
+front.vars <- c("var1", "var2")
+df <- df[c(front.vars, setdiff(names(df), front.vars))]
+
 #CHECK STRATA PROPORTIONS
 ##location
 frq(df$LOCATION_TYPE)
@@ -128,11 +132,6 @@ write.xlsx(all_replacements, file = "replace_sample.xlsx")
 #REPLACEMENTS FOR ONE EMPLOYEE
 df$DIRECT_REPORTS_2 <- ifelse(df$DIRECT_REPORTS == 0,0,1) #if manager status is considered
 
-#reorder variables for tracker
-front.vars <- c("FULL_NAME", "PERSON_NUMBER", "PRIMARY_EMAIL","REPORTING_LEVEL_1",
-                "REPORTING_LEVEL_2__DESCRIPTION_","RACE_ETHNICITY","TENURE_RANGE","EMPLOYEE_GENDER")
-
-df <- df[c(front.vars, setdiff(names(df), front.vars))]
 
 #find matching staff
 origin_emp <- df %>% 
