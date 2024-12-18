@@ -79,10 +79,12 @@ frq(df.cross$var)
 #   group_by(group) %>%
 #   sample_frac(8/nrow(df.cross))
  
-#Pull Balanced Stratified Sample
-balanced.strat <- df.cross %>%
+#Pull Balanced Stratified Sample... will pull the max number of records within a strata if the max is less than what you ask for
+balanced.strat <- df.usgenpop %>%
   group_by(group) %>%
-  sample_n(1) %>%
+  mutate(sample_size = n()) %>%
+  group_by(group) %>%
+  sample_n(min(7, sample_size)) %>%
   ungroup()
 
 #get additional participants
