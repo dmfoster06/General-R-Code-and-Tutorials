@@ -1,0 +1,10 @@
+#First, you'll need to set your working directory to point to the folder where your pdfs are. 
+#You can do this by clicking "session" at the top of the screen, then "set working directory" then "choose directory...". 
+#Your output file will write into the working directory folder. 
+
+#You'll need to first install the package qpdf using the code below. 
+install.packages("qpdf")
+
+#Then, run the following code, changing the pdf file names to your files. You can change the output file name as well, but you don't have to. 
+qpdf::pdf_combine(input = c("file2.pdf", "file2.pdf", "file3.pdf"),
+                  output = "output.pdf")
