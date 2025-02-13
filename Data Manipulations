@@ -8,6 +8,10 @@ anyDuplicated(df$x) #returns a number
 
 df.dups <- df[duplicated(df$x), ] #Create dataset with only duplicates
 
+#PUT COLUMN NAMES IN A LIST
+list <- list("x1", "x2")
 
-
-
+##dynamic based on variable positions
+variable.positions <- paste(seq_along(df), names(df), sep=": ")
+print(variable.positions)
+list <- as.list(names(df)[1:10])
