@@ -16,3 +16,5 @@ variable.positions <- paste(seq_along(df), names(df), sep=": ")
 print(variable.positions)
 list <- names(df)[1:10]
 
+#WRITE TO EXCEL
+openxlsx::write.xlsx(df, file = "filename.xlsx")
