@@ -6,14 +6,39 @@ library(sandwich) #robust standard errors
 #Define order of levels for categorical variables
 df$group <- factor(df$group, levels = c("A", "B", "C"))
 
+# Visualize Relationship
+plot(jitter(df$x),jitter(df$y))
+
+# Fit Lines
+df.complete <- subset(df, select= c(uniqueid, x,y))
+df.complete <- df.complete[complete.cases(df.complete), ]
+
+loess.df <- loess(x ~ y, data=df.complete, span=.5)
+smooth.df <- predict(loess.df) 
+plot(df.complete$x, df.complete$y, pch=19, main='Loess Fit')
+lines(smooth.df, x=df.complete$x, col='red')
+
+# Correlation
+cor.test(df$x,df$y,method="pearson") 
+
+# Simple Regression
+sreg <- lm(y ~ x 
+                  , data = df)
+summary(sreg)
+
+poly <- lm(y ~ poly(x, degree = 2), data = df)  # Polynomial regression to assess nonlinearity
+summary(poly)
+
+
 #Specify Model
 mod <- lm(y ~  x1 + as.factor(x2), 
                   data = df)
-
+#diagnostics
 vif(mod) #multicollinearity check
 plot(mod, 1) 
 bptest(mod) #heteroskedasticity check
 
+#model summary
 summary(mod) #unstandardized regression without robust standard errors
 
 coeftest(mod, vcov = vcovHC(mod, type = "HC0")) #unstandardized reg w/ robust se
