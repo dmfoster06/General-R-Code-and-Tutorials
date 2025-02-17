@@ -2,6 +2,7 @@ library(lm.beta) #standardized beta coefficients
 library(lmtest) #Breusch-Pagan test for heterskedasticity
 library(car) #VIF
 library(sandwich) #robust standard errors
+library(ggplot2)
 
 #Define order of levels for categorical variables
 df$group <- factor(df$group, levels = c("A", "B", "C"))
@@ -10,13 +11,11 @@ df$group <- factor(df$group, levels = c("A", "B", "C"))
 plot(jitter(df$x),jitter(df$y))
 
 # Fit Lines
-df.complete <- subset(df, select= c(uniqueid, x,y))
-df.complete <- df.complete[complete.cases(df.complete), ]
-
-loess.df <- loess(x ~ y, data=df.complete, span=.5)
-smooth.df <- predict(loess.df) 
-plot(df.complete$x, df.complete$y, pch=19, main='Loess Fit')
-lines(smooth.df, x=df.complete$x, col='red')
+ggplot(df, aes(x = VARNAME, y = VARNAME)) +
+  geom_point() +  # This adds the scatter points
+  geom_smooth(method = "loess", se = FALSE) + 
+  labs(x = "VARNAME", y = "VARNAME") +
+  theme_minimal()  
 
 # Correlation
 cor.test(df$x,df$y,method="pearson") 
