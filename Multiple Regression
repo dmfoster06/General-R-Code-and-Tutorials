@@ -1,0 +1,34 @@
+library(lm.beta) #standardized beta coefficients
+library(lmtest) #Breusch-Pagan test for heterskedasticity
+library(car) #VIF
+library(sandwich) #robust standard errors
+
+#Define order of levels for categorical variables
+df$group <- factor(df$group, levels = c("A", "B", "C"))
+
+#Specify Model
+mod <- lm(y ~  x1 + as.factor(x2), 
+                  data = df)
+
+vif(mod) #multicollinearity check
+plot(mod, 1) 
+bptest(mod) #heteroskedasticity check
+
+summary(mod) #unstandardized regression without robust standard errors
+
+coeftest(mod, vcov = vcovHC(mod, type = "HC0")) #unstandardized reg w/ robust se
+
+lm.beta(mod) #standardized coefficients
+
+
+
+
+
+
+
+
+
+
+
+
+
