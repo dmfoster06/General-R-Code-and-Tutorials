@@ -1,1 +1,77 @@
+---
+title: "Title Here"
+author: "Author Here"
+date: "Date Here"
+output:
+  pdf_document:
+    latex_engine: xelatex
+  html_document:
+    df_print: paged
+header-includes: \usepackage{amssymb}
+geometry: margin=0.5in
+---
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  width = 60)
+```
+
+```{r ,warning=FALSE, message=FALSE}
+setwd()
+
+#libraries
+library()
+
+#Analysis Dataset
+df <- read.csv("filename.csv")
+df <- readxl::read_excel("filepathandname.xlsx", sheet = "Sheet1")
+```
+
+```{r ,warning=FALSE, message=FALSE}
+options(width = 120) #add to change width
+#Regular code chunk that will not be visible in the PDF and will not show warnings or messages.
+```
+-----------Fonts, headers, and formats------------
+# Header Level 1
+## Header Level 2
+
+**Bold text for level 3 headers**
+
+Use a backslash at the end of a sentence to return to the very next line.\
+You can also return 2 lines down by just hitting enter twice. 
+
+Like this. 
+
+^1^ Use the carrots to create a superscript. 
+
+<put hyperlinks inside these> 
+
+\newpage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
