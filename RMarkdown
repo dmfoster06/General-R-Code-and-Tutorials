@@ -11,11 +11,15 @@ header-includes: \usepackage{amssymb}
 geometry: margin=0.5in
 ---
 
+--------Setup Chunk----------
+
 ```{r, setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = FALSE,
   width = 60)
 ```
+
+---------Libraries and Read in Data/ Data prep---------
 
 ```{r ,warning=FALSE, message=FALSE}
 setwd()
@@ -28,11 +32,15 @@ df <- read.csv("filename.csv")
 df <- readxl::read_excel("filepathandname.xlsx", sheet = "Sheet1")
 ```
 
+-------Regular chunk---------
+
 ```{r ,warning=FALSE, message=FALSE}
 options(width = 120) #add to change width
 #Regular code chunk that will not be visible in the PDF and will not show warnings or messages.
 ```
+
 -----------Fonts, headers, and formats------------
+
 # Header Level 1
 ## Header Level 2
 
