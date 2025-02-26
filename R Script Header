@@ -13,5 +13,5 @@ setwd("")
 ######LIBRARIES#####
 
 #####DATA PREP#####
-df <- read_excel("filename.xlsx", sheet = "SheetName")
+df <- readxl::read_excel("filename.xlsx", sheet = "SheetName")
 df <- read.csv("filename.csv")
