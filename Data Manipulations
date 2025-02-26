@@ -16,5 +16,12 @@ variable.positions <- paste(seq_along(df), names(df), sep=": ")
 print(variable.positions)
 list <- names(df)[1:10]
 
+#DROP EMPTY COLUMNS FROM A DATAFRAME
+df <- df %>% 
+  mutate(across(everything(), ~replace(., . %in% c(""), NA)))
+
+df <- df %>%
+  select_if(function(x) !(all(is.na(x))))
+
 #WRITE TO EXCEL
 openxlsx::write.xlsx(df, file = "filename.xlsx")
