@@ -40,5 +40,8 @@ df <- df %>%
 df <- df %>%
   mutate(across(all_of(variable_list), as.numeric))
 
+#MANUALLY CREATE DUMMY VARIABLES
+df <- fastDummies::dummy_cols(df, select_columns = "var1") #make sure there are no spaces or special characters in any variable levels
+
 #WRITE TO EXCEL
 openxlsx::write.xlsx(df, file = "filename.xlsx")
