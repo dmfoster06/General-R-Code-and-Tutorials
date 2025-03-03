@@ -1,0 +1,45 @@
+
+#MODERATED MODERATED REGRESSION-------------------------------------------------------------------------------
+process(data=df,y="DV",x="IV",w="MOD1",z="MOD2",model=3,
+        conf=95,boot=1000,seed=1234,center=2,plot=1,moments=1,intprobe=1,hc=0, #REMOVE HC IF HOMOSCEDASTIC
+        cov=c("COV1","COV2"))
+
+###simple slopes
+df.viz <- data.frame(IV_C=c(),
+                     MOD1_C=c(),
+                     MOD2_C=c(),
+                     DV=c())
+
+df.viz$MOD1_C <- factor(df.viz$MOD1_C) #moderator 1 as factor
+df.viz$MOD2_C <- factor(df.viz$MOD2_C) #moderator 2 as factor
+
+ggplot(df.viz, aes(x = IV_C, y = DV, group = interaction(MOD1_C, MOD2_C), color = MOD1_C, linetype = MOD2_C)) +
+  geom_line() +
+  geom_point() +
+  facet_wrap(~MOD2_C) +  # Facet by levels of the second moderator
+  labs(title = "3-Way Interaction Plot",
+       x = "IV (Centered)",
+       y = "DV",
+       color = "MOD1 (Centered)",
+       linetype = "MOD2 (Centered") +
+  theme_minimal()
+
+#MODERATED MEDIATION
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
