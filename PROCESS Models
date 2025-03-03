@@ -24,12 +24,20 @@ ggplot(df.viz, aes(x = IV_C, y = DV, group = interaction(MOD1_C, MOD2_C), color 
        linetype = "MOD2 (Centered") +
   theme_minimal()
 
-#MODERATED MEDIATION
+#1ST STAGE MODERATED MEDIATION----------------------------------------------------------------------------------------
+process(data=df,y="DV",x="IV",m="MEDIATOR",w="MODERATOR",model=7,
+        conf=95,boot=1000,seed=1234,center=2,plot=1,moments=1,intprobe=1,hc=0, #REMOVE HC IF HOMOSCEDASTIC
+        cov=c("COV1","COV2"))
 
+###simple slopes
+df.viz <- data.frame(IV_C=c(),
+                     MODERATOR_C=c(),
+                     MEDIATOR=c())
 
+df.viz$MODERATOR_C <- factor(df.viz$MODERATOR_C) #moderator as factor
 
-
-
+ggplot(df.viz,aes(x=IV_C,y=MEDIATOR,group=MODERATOR_C))+geom_line(aes(linetype=MODERATOR_C))+
+  geom_point()
 
 
 
