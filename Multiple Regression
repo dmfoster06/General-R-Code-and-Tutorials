@@ -34,8 +34,9 @@ mod <- lm(y ~  x1 + as.factor(x2),
                   data = df)
 #diagnostics
 vif(mod) #multicollinearity check
-plot(mod, 1) 
-bptest(mod) #heteroskedasticity check
+plot(mod, 1) #visual heteroskedasticity check
+bptest(mod) #statistical heteroskedasticity check, sensitive to sample size
+hist(mod$residuals) #residual normality check
 
 #model summary
 summary(mod) #unstandardized regression without robust standard errors
