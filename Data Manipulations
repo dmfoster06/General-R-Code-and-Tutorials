@@ -8,6 +8,13 @@ anyDuplicated(df$x) #returns a number
 
 df.dups <- df[duplicated(df$x), ] #Create dataset with only duplicates
 
+#REORDER COLUMNS
+## move to last position
+df <- df %>% relocate(var, .after = last_col())
+
+## move to after something 
+df <- df %>% relocate(var, .after = var1)
+
 #PUT COLUMN NAMES IN A LIST
 list <- c("x1", "x2")
 
