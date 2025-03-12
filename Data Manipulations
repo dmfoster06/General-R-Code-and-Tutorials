@@ -52,3 +52,6 @@ df <- fastDummies::dummy_cols(df, select_columns = "var1") #make sure there are 
 
 #WRITE TO EXCEL
 openxlsx::write.xlsx(df, file = "filename.xlsx")
+
+#WRITE TO CSV
+write.csv(df, "filename.csv", row.names = FALSE)
