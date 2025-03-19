@@ -1,24 +1,3 @@
-#Libraries 
-library(dplyr)
-library(sjmisc) #frq function
-library(epiDisplay) #tabpct function
-library(qacBase) #qstats function
-library(emmeans) #multiple comparisons
-library(lsr) #cohens d
-library(sandwich) #robust standard errors
-library(stats) #wilcoxon test
-library(car) #Levene Test
-
-
-
-
-
-
-
-
-
-
-
 
 
 
