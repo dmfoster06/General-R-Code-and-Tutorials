@@ -1,0 +1,20 @@
+#CREATE FREQUENCY TABLE FOR ALL VARIABLES IN A LIST
+library(dplyr)
+library(tidyr)
+## Create list
+varlist <- c("var1","var2")
+
+### Create Frequency Tables 
+df %>%
+  pivot_longer(cols = all_of(varlist), names_to = "Item", values_to = "Stat") %>%
+  group_by(Item) %>%
+  summarise(
+    N = sum(!is.na(Stat)),
+    Unfavorable = round(sum(Stat == 1, na.rm = TRUE)/N,2),
+    Neutral = round(sum(Stat == 2, na.rm = TRUE)/N,2),
+    Favorable = round(sum(Stat == 3, na.rm = TRUE)/N,2),
+    .groups = "drop"
+  )
+
+
+
