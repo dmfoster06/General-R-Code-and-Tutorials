@@ -51,7 +51,7 @@ df <- df %>%
 df <- fastDummies::dummy_cols(df, select_columns = "var1") #make sure there are no spaces or special characters in any variable levels
 
 #SET LEVELS OF A FACTOR
-
+df$var <- factor(df$var, levels = c("Level 1", "Level 2"))
 
 #WRITE TO EXCEL
 openxlsx::write.xlsx(df, file = "filename.xlsx")
