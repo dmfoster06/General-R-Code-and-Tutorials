@@ -53,6 +53,19 @@ df <- fastDummies::dummy_cols(df, select_columns = "var1") #make sure there are 
 #SET LEVELS OF A FACTOR
 df$var <- factor(df$var, levels = c("Level 1", "Level 2"))
 
+#JOIN TABLES
+df <- df1 %>% 
+  full_join(df2,by="")
+
+df.removematches <- df1 %>% 
+  anti_join(df2,by="")
+
+df <- df1 %>% 
+  inner_join(df2,by="")
+
+df <- df1 %>% 
+  left_join(df2,by="")
+
 #WRITE TO EXCEL
 openxlsx::write.xlsx(df, file = "filename.xlsx")
 
