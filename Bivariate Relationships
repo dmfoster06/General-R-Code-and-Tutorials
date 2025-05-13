@@ -1,6 +1,8 @@
 library(reporttools) #pairwise fisher exact test
 
 #CHI-SQUARE TEST
+test <- chisq.test(df$x, df$y, correct=FALSE) 
+cramersv(test)
 
 # FISHERS EXACT TEST
 ## Single test
