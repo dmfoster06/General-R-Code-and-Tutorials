@@ -9,6 +9,9 @@ anyDuplicated(df$x) #returns a number
 df.dups <- df[duplicated(df$x), ] #Create dataset with only duplicates
 
 #REORDER COLUMNS
+## move to first position
+df <- df %>% relocate(var, .before = 1)
+
 ## move to last position
 df <- df %>% relocate(var, .after = last_col())
 
