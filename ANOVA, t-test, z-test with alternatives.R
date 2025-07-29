@@ -5,6 +5,7 @@ library(dplyr)
 library(epiDisplay) #tabpct function
 library(sjmisc) #frq function
 library(qacBase) #qstats function
+library(effectsize) #eta squared
 library(emmeans) #multiple comparisons
 library(lsr) #cohens d
 library(sandwich) #robust standard errors
@@ -37,6 +38,8 @@ shapiro.test(mod$residuals) #Shapiro Wilk test (ns = normal)
 # DIFFERENCES BETWEEN 3+ GROUPS - Normal, Homoscedastic or Heteroscedastic
 Anova(mod, type=3) #homoscedastic
 Anova(mod, type=3, white.adjust="hc0") #heterscedastity-corrected cov matrix / robust SE
+
+eta_squared(mod, partial = FALSE)
 
 qstats(df, y, group) #Group N, Mean, SD 
 mod.emmeans <- emmeans(mod, pairwise ~ group, adjust="fdr", infer = c(FALSE, TRUE))
