@@ -19,7 +19,6 @@ library(reporttools) #pairwise fisher exact test
 
 # DESCRIPTIVES AND DIAGNOSTICS
 ## Descriptives
-tabpct(df$y,df$group,graph=FALSE,percent = "col") #Frequency Table
 qstats(df, y, group) #Group N, Mean, SD (at least k+1 per group)
 
 ## Homogeneity of Variances - ANOVA or t-test
