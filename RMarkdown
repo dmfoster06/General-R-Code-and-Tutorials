@@ -7,7 +7,11 @@ output:
     latex_engine: xelatex
   html_document:
     df_print: paged
-header-includes: \usepackage{amssymb}
+  word_document: default
+header-includes:
+  - \usepackage{amssymb}
+  - \usepackage{fontspec}
+  - \setmainfont{Arial}
 geometry: margin=0.5in
 ---
 
