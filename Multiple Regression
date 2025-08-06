@@ -7,12 +7,9 @@ library(ggplot2)
 #Define order of levels for categorical variables
 df$group <- factor(df$group, levels = c("A", "B", "C"))
 
-# Visualize Relationship
-plot(jitter(df$x),jitter(df$y))
-
-# Fit Lines
+# Visualize Relationship with fit line
 ggplot(df, aes(x = VARNAME, y = VARNAME)) +
-  geom_point() +  # This adds the scatter points
+  geom_jitter(width = 0.3, height = 0.3, alpha = 0.5) +  
   geom_smooth(method = "loess", se = FALSE) + 
   labs(x = "VARNAME", y = "VARNAME") +
   theme_minimal()  
