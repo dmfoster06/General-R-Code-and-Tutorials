@@ -16,5 +16,23 @@ df %>%
     .groups = "drop"
   )
 
+#CREATE DESCRIPTIVES FOR ALL NUMERIC VARIABLES IN A LIST
+library(psych)
+
+## Create list
+varlist <- c("var1","var2")
+
+## Create descriptives object
+descriptives <- describe(df[, varlist])
+
+## Convert to a dataframe
+df.desc <- as.data.frame(descriptives)
+df.desc$variable <- rownames(df.desc)
+rownames(df.desc) <- NULL
+
+
+
+
+
 
 
