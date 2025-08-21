@@ -8,6 +8,9 @@ anyDuplicated(df$x) #returns a number
 
 df.dups <- df[duplicated(df$x), ] #Create dataset with only duplicates
 
+#REMOVE SECOND ROW OF DATA (USUALLY FOR QUALTRICS EXPORT)
+df <- df[-2, ]
+
 #REORDER COLUMNS
 ## move to first position
 df <- df %>% relocate(var, .before = 1)
