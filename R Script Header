@@ -10,8 +10,17 @@ rm(list=setdiff(ls(), "df")) #remove everything from environment except x object
 
 setwd("")
 
-######LIBRARIES#####
+#LIBRARIES#####
 
-#####DATA PREP#####
+#DATA PREP#####
 df <- readxl::read_excel("filename.xlsx", sheet = "SheetName")
 df <- read.csv("filename.csv")
+
+#standardize variable names
+library(janitor)
+
+df <- df %>%
+  clean_names(case = "snake")  # lower case + underscores
+
+
+
