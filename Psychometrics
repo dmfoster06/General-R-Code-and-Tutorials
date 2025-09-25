@@ -1,0 +1,86 @@
+V1
+## EFA - Factors to Extract
+library("GPArotation")
+
+scalesmatrix <- cor(ACC_pool1)
+(scree(scalesmatrix)) 
+
+para.fa <- fa.parallel(ACC_pool1, fa = "fa", show.legend = FALSE)
+round(para.fa$fa.values, 2)
+
+#5 eigenvalues > 1.0
+# scree test suggests 3
+# parallel analysis suggests 4
+
+###4 factor extraction based on paralell analysis
+# principal axis factoring method
+accfit.ml1 <- fa(ACC_pool1, nfactors = 4, rotate = "oblimin", fm="pa")
+print(loadings(accfit.ml1), digits = 2, cutoff = .3, sort=TRUE)
+# the fourth factor is mostly crossloadings. The items on that factor don't make sense together. 
+
+###3 factor extraction based on scree test
+# EFA - factor extraction - 1st iteration
+# principal axis factoring method
+accfit.ml1 <- fa(ACC_pool1, nfactors = 3, rotate = "oblimin", fm="pa")
+print(loadings(accfit.ml1), digits = 2, cutoff = .3, sort=TRUE)
+# going with 3 factor extraction final.
+
+
+#Remove items with cross loadings > .3  or loadings on the wrong factor (5 items)
+ACC_pool2 <- subset(ACC_pool1, select= -c(EXPL2f,EVAL2a,EVAL2j,CONS2g,CONS2h))
+
+
+# EFA - factor extraction - 2nd iteration
+# principal axis factoring method
+accfit.ml2 <- fa(ACC_pool2, nfactors = 3, rotate = "oblimin", fm="pa")
+print(loadings(accfit.ml2), digits = 2, cutoff = 0, sort=TRUE)
+
+
+print(accfit.ml2) # Test of the hypothesis that 3 factors are sufficient.
+
+#after iteration, left with 24 items
+
+#####ITEM ANALYSIS#####
+
+#Adjusted Fisher-Pearson coefficient of skewness
+#https://www.itl.nist.gov/div898/handbook/eda/section3/eda35b.htm
+skew <- as.data.frame(psych::skew(ACC_pool2,na.rm = TRUE,type=2))
+label <- as.data.frame(names(ACC_pool2))
+skew.table <- cbind(label,skew)
+
+write_xlsx(skew.table,"~/Documents/Acountability Study/development phase v2/skewness_new items.xlsx")
+
+#Remove items > absolute value 1 (same result as 1.1)
+ACC_pool3 <- subset(ACC_pool2, select= -c(EVAL2b,EVAL2g))
+
+# Corrected item-total correlations 
+library(tidyselect) # activate dplyr as well for piping
+
+CONS.reduced <- ACC_pool3 %>%
+  select(vars_select(names(ACC_pool3), starts_with('CONS2', ignore.case = TRUE)))
+
+EXPL.reduced <- ACC_pool3 %>%
+  select(vars_select(names(ACC_pool3), starts_with('EXPL2', ignore.case = TRUE)))
+
+EVAL.reduced <- ACC_pool3 %>%
+  select(vars_select(names(ACC_pool3), starts_with('EVAL2', ignore.case = TRUE)))
+
+
+alpha(CONS.reduced) # 
+#Final Consequences items: 
+
+alpha(EXPL.reduced) #
+#Final Explanation items: 
+
+alpha(EVAL.reduced) #
+#Final Evaluation items: 
+
+
+# Alphas for final 3-item subscales
+myKeys <- make.keys(ACC_pool3,list(CONS=c("CONS2f", "CONS2e", "CONS2d"),
+                                   EVAL=c("EVAL2e", "EVAL2d", "EVAL2f"),
+                                   EXPL=c("EXPL2g", "EXPL2c", "EXPL2a")))
+my.scores <- scoreItems(myKeys,ACC_pool3) 
+print(my.scores,short=FALSE)
+
+
