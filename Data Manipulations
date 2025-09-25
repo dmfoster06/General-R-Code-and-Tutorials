@@ -72,6 +72,14 @@ df <- df1 %>%
 df <- df1 %>% 
   left_join(df2,by="")
 
+#CASEWISE DELETION
+
+df_clean <- df %>%
+  filter(complete.cases(.)) #for only complete cases across the dataset
+
+df_clean <- df %>% 
+  drop_na(var1,var2) #for only complete cases on specific variables
+
 #WRITE TO EXCEL
 openxlsx::write.xlsx(df, file = "filename.xlsx")
 
