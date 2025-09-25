@@ -39,9 +39,21 @@ hist(mod$residuals) #residual normality check
 summary(mod) #unstandardized regression without robust standard errors
 
 coeftest(mod, vcov = vcovHC(mod, type = "HC0")) #unstandardized reg w/ robust se
+#https://www.brodrigues.co/blog/2018-07-08-rob_stderr/
+#https://www.rdocumentation.org/packages/sandwich/versions/3.0-2/topics/vcovHC
+#https://research.wu.ac.at/ws/portalfiles/portal/18955008/document.pdf
 
 lm.beta(mod) #standardized coefficients
 
+#RELATIVE WEIGHTS ANALYSIS
+library(rwa)
+
+df %>%
+    rwa(outcome = "y",
+        predictors = c("var1",
+                       "var2",
+                       "var3"),
+        applysigns = TRUE)
 
 
 
