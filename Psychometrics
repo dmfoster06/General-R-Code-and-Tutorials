@@ -84,3 +84,11 @@ my.scores <- scoreItems(myKeys,ACC_pool3)
 print(my.scores,short=FALSE)
 
 
+#CFA
+accfull.model3 <- 'CONS =~ CONS2f + CONS2e + CONS2d
+                EXPL =~ EXPL2g + EXPL2c + EXPL2a
+                EVAL =~ EVAL2e + EVAL2d + EVAL2f
+                ACC =~ CONS + EXPL + EVAL
+                ACC~~ACC'
+accfull.fit3 <- lavaan::cfa(accfull.model3, data=ACC_pool3)
+summary(accfull.fit3, fit.measures=TRUE, standardized=TRUE)
