@@ -11,5 +11,32 @@ fisher.test(df$WORKPLACEPREFERENCE, df$EMPLOYEEGENDER, simulate.p.value = TRUE, 
 ## Pairwise test
 pairwise.fisher.test(df.salary$Recommend_fav,df.salary$GradeRange_24,p.adjust.method = "fdr")
 
+# RELATIVE RISK ANALYSIS
+https://rpubs.com/zaidyousif/1116472
+library(epitools)
+
+Dichotomize items (combine neutral with disagree)
+Note: 1 should be the x or y discussed in the conclusion. 
+e.g., people who disagree on var1 (x) are more likely to also disagree on var2 (y). 
+In this case on both variables, disagreement responses should be set to 1.
+If you want to consistently use "more likely to...", make sure to use two positives or two negatives if you expect a 
+positive relationship or use a positive and a negative if you expect a negative relationship. 
+
+df$x_binary <- 
+  ifelse(df$x %in% c(1:3),0,
+  ifelse(df$x %in% c(4:5),1,NA))
+
+df$y_binary <- 
+  ifelse(df$y %in% c(4:5),0,
+  ifelse(df$y %in% c(1:3),1,NA))
+
+tabpct(df$x_binary,df$y_binary,graph=FALSE,percent="row")
+
+# Run Relative Risk
+epitools::riskratio(df$x_binary,y=df$y_binary,
+                    rev="neither",method="wald")
+
+
+
 
 
