@@ -39,7 +39,7 @@ df <- readxl::read_excel("filepathandname.xlsx", sheet = "Sheet1")
 -------Regular chunk---------
 
 ```{r ,warning=FALSE, message=FALSE}
-options(width = 120) #add to change width
+options(width = 90) #add to change width
 #Regular code chunk that will not be visible in the PDF and will not show warnings or messages.
 ```
 
