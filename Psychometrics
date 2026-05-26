@@ -2,43 +2,15 @@ V1
 ## EFA - Factors to Extract
 library("GPArotation")
 
-scalesmatrix <- cor(ACC_pool1)
+items <- subset(df, select = x1:x10)
+items.complete <- items[complete.cases(items), ]
+scalesmatrix <- cor(items.complete)
 (scree(scalesmatrix)) 
 
-para.fa <- fa.parallel(ACC_pool1, fa = "fa", show.legend = FALSE)
-round(para.fa$fa.values, 2)
-
-#5 eigenvalues > 1.0
-# scree test suggests 3
-# parallel analysis suggests 4
-
-###4 factor extraction based on paralell analysis
+##factor extraction
 # principal axis factoring method
-accfit.ml1 <- fa(ACC_pool1, nfactors = 4, rotate = "oblimin", fm="pa")
-print(loadings(accfit.ml1), digits = 2, cutoff = .3, sort=TRUE)
-# the fourth factor is mostly crossloadings. The items on that factor don't make sense together. 
-
-###3 factor extraction based on scree test
-# EFA - factor extraction - 1st iteration
-# principal axis factoring method
-accfit.ml1 <- fa(ACC_pool1, nfactors = 3, rotate = "oblimin", fm="pa")
-print(loadings(accfit.ml1), digits = 2, cutoff = .3, sort=TRUE)
-# going with 3 factor extraction final.
-
-
-#Remove items with cross loadings > .3  or loadings on the wrong factor (5 items)
-ACC_pool2 <- subset(ACC_pool1, select= -c(EXPL2f,EVAL2a,EVAL2j,CONS2g,CONS2h))
-
-
-# EFA - factor extraction - 2nd iteration
-# principal axis factoring method
-accfit.ml2 <- fa(ACC_pool2, nfactors = 3, rotate = "oblimin", fm="pa")
-print(loadings(accfit.ml2), digits = 2, cutoff = 0, sort=TRUE)
-
-
-print(accfit.ml2) # Test of the hypothesis that 3 factors are sufficient.
-
-#after iteration, left with 24 items
+fit <- fa(items.complete, nfactors = 4, rotate = "oblimin", fm="pa")
+print(loadings(fit), digits = 2, cutoff = .3, sort=TRUE)
 
 #####ITEM ANALYSIS#####
 
