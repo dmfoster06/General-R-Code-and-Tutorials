@@ -32,7 +32,7 @@ mod <- lm(y ~  x1 + as.factor(x2),
 #diagnostics
 vif(mod) #multicollinearity check
 plot(mod, 1) #visual heteroskedasticity check
-bptest(mod) #statistical heteroskedasticity check, sensitive to sample size
+bptest(mod) #statistical heteroskedasticity check, sensitive to sample size, p < .05 means heteroskedasticity present
 hist(mod$residuals) #residual normality check
 
 #model summary
