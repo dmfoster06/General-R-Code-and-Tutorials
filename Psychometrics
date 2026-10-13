@@ -64,3 +64,34 @@ accfull.model3 <- 'CONS =~ CONS2f + CONS2e + CONS2d
                 ACC~~ACC'
 accfull.fit3 <- lavaan::cfa(accfull.model3, data=ACC_pool3)
 summary(accfull.fit3, fit.measures=TRUE, standardized=TRUE)
+
+
+## CFA - theorized model
+
+```{r ,warning=FALSE, message=FALSE, echo=TRUE}
+options(width = 120)
+acc.fit <- lavaan::cfa(acc.mod, data=df.b)
+summary(acc.fit, fit.measures=TRUE, standardized=TRUE)
+```
+
+\newpage
+
+## CFA - combine consequences and rewards
+
+```{r ,warning=FALSE, message=FALSE, echo=TRUE}
+options(width = 120)
+acc.outcomes.mod <- 'OUTCOMES =~ CONS2d+CONS2e+CONS2f+REWARD2c+ REWARD2f+ REWARD2i
+              EXPL =~ EXPL2c+ EXPL2g+ EXPL2i
+              EVAL =~ EVAL2d+EVAL2e+EVAL2f
+              ACC =~ OUTCOMES + EXPL + EVAL'
+
+acc.outcomes.fit <- lavaan::cfa(acc.outcomes.mod, data=df.b)
+summary(acc.outcomes.fit, fit.measures=TRUE, standardized=TRUE)
+```
+
+## Compare Theorized CFA and Outcomes CFA
+
+```{r ,warning=FALSE, message=FALSE, echo=TRUE}
+options(width = 120)
+anova(acc.fit,acc.outcomes.fit)
+```
